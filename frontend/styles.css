@@ -1,0 +1,10 @@
+:root {
+    --background: rgb(66, 1, 1);
+    --init: rgb(156, 6, 6);
+}
+   
+* {
+    padding: 0;
+    margin: 0;
+    border: 0;
+}

@@ -1,0 +1,43 @@
+header-component {
+    height: 40px;
+    width: 100vw;
+    display: block;
+}
+
+header-component header {
+    background-color: rgb(182, 114, 5);
+    height: inherit;
+    width: inherit;
+}
+
+header-component nav{
+    height: inherit;
+    width: inherit;
+}
+
+header-component ul{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-end;
+    list-style: none;
+    padding-right: 50px;
+    
+    height: inherit;
+}
+
+header-component li {
+    padding: 20px;
+}
+
+header-component a {
+    font-weight: 700;
+    margin: 0 25px;
+    color: #fff;
+    text-decoration: none;
+  }
+  
+header-component a:hover {
+    padding-bottom: 5px;
+    box-shadow: inset 0 -2px 0 0 #fff;
+  }
