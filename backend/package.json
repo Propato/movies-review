@@ -1,0 +1,17 @@
+{
+  "name": "backend",
+  "version": "0.0.0",
+  "description": "Backend for system data",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "test": "@echo 'None'",
+    "build": "node index.js",
+    "watch": "node --watch index.js"
+  },
+  "author": "David Propato",
+  "dependencies": {
+    "express": "^4.18.2",
+    "pg": "^8.11.3"
+  }
+}
