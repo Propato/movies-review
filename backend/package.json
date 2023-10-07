@@ -1,5 +1,6 @@
 {
   "name": "backend",
+  "author": "David Propato",
   "version": "0.0.0",
   "description": "Backend for system data",
   "type": "module",
@@ -9,9 +10,9 @@
     "build": "node index.js",
     "watch": "node --watch index.js"
   },
-  "author": "David Propato",
   "dependencies": {
     "express": "^4.18.2",
+    "node-fetch": "^2.7.0",
     "pg": "^8.11.3"
   }
 }
