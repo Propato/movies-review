@@ -1,21 +1,31 @@
 import fetch from 'node-fetch';
-import { options, language } from './conection'
+import { options, language } from './conection.js'
 
-// type = tv | movie
+// showType = tv | movie
 
-export function GenreList(type) {
-    url = `https://api.themoviedb.org/3/genre/${type}/list?language=${language}}`;
+const InvalidShowType = {
+    success: false,
+    status_code: 1,
+    status_message: "Invalid Show Type. Only 'movie' and 'tv' are allowed."
+};
+
+export async function GenreList(req, res) {
+    const showType = req.params.ShowType;
+
+    const url = `https://api.themoviedb.org/3/genre/${showType}/list?language=${language}`;
     
-    const result = fetch(url, options)
+    const result = await fetch(url, options)
         .then(res => res.json())
-        .then(json => { return json} )
-        .catch(err => console.error('error:' + err));
+        .then(json => {
+            return json.genres ? { success: true, genres: json.genres } : InvalidShowType;
+        })
+        .catch(err => { return err; });
     
-    return result;
+    res.status(200).json(result);
 }
 
-export function descoverShows(type, pag){
-    url = `https://api.themoviedb.org/3/discover/${type}?include_adult=false&language=${language}&page=${pag}&sort_by=popularity.desc`;
+export function descoverShows(showType, pag){
+    let url = `https://api.themoviedb.org/3/discover/${showType}?include_adult=false&language=${language}&page=${pag}&sort_by=popularity.desc`;
 
     const result = fetch(url, options)
         .then(res => res.json())
@@ -25,8 +35,8 @@ export function descoverShows(type, pag){
     return result;
 }
 
-export function getPopularShows(type, pag){
-    url = `https://api.themoviedb.org/3/${type}/popular?language=${language}&page=${pag}`;
+export function getPopularShows(showType, pag){
+    let url = `https://api.themoviedb.org/3/${showType}/popular?language=${language}&page=${pag}`;
 
     const result = fetch(url, options)
         .then(res => res.json())
@@ -36,8 +46,8 @@ export function getPopularShows(type, pag){
     return result;
 }
 
-export function getTopShows(type, pag){
-    url = `https://api.themoviedb.org/3/${type}/top_rated?language=${language}&page=${pag}`;
+export function getTopShows(showType, pag){
+    let url = `https://api.themoviedb.org/3/${showType}/top_rated?language=${language}&page=${pag}`;
 
     const result = fetch(url, options)
         .then(res => res.json())
@@ -47,8 +57,8 @@ export function getTopShows(type, pag){
     return result;
 }
 
-export function searchShow(type, show, pag){
-    url = `https://api.themoviedb.org/3/search/${type}?query=${show}&include_adult=false&language=${language}&page=${pag}`;
+export function searchShow(showType, show, pag){
+    let url = `https://api.themoviedb.org/3/search/${showType}?query=${show}&include_adult=false&language=${language}&page=${pag}`;
 
     const result = fetch(url, options)
         .then(res => res.json())
@@ -58,8 +68,8 @@ export function searchShow(type, show, pag){
     return result;
 }
 
-export function showStreaming(type, id){
-    url = `https://api.themoviedb.org/3/${type}/${id}/watch/providers`;
+export function showStreaming(showType, id){
+    let url = `https://api.themoviedb.org/3/${showType}/${id}/watch/providers`;
 
     const result = fetch(url, options)
         .then(res => res.json())
@@ -70,7 +80,7 @@ export function showStreaming(type, id){
 }
 
 export function searchAll(pag){
-    url = `https://api.themoviedb.org/3/search/multi?include_adult=false&language=${language}&page=${pag}`;
+    let url = `https://api.themoviedb.org/3/search/multi?include_adult=false&language=${language}&page=${pag}`;
 
     const result = fetch(url, options)
         .then(res => res.json())
@@ -81,7 +91,7 @@ export function searchAll(pag){
 }
 
 export function searchPerson(pag){
-    url = `https://api.themoviedb.org/3/search/person?include_adult=false&language=${language}&page=${pag}`;
+    let url = `https://api.themoviedb.org/3/search/person?include_adult=false&language=${language}&page=${pag}`;
 
     const result = fetch(url, options)
         .then(res => res.json())
