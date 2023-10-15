@@ -13,14 +13,14 @@ export const options = {
 };
 
 // Autenticação do token
-const url = 'https://api.themoviedb.org/3/authentication';
 
-const conection = await fetch(url, options)
-    .then(res => res.json())
-    .then(json => { return json.success } )
-    .catch(err => console.error('error:' + err));
+export async function authentication() {
+    const url = 'https://api.themoviedb.org/3/authentication';
 
-if(!conection){
-    console.log("ERROR AT CONECTION");
-    process.exit(1);
+    const conection = await fetch(url, options)
+        .then(res => res.json())
+        .then(json => { return json.success } )
+        .catch(err => console.error('error:' + err));
+
+    return conection;
 }
