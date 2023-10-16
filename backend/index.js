@@ -1,6 +1,13 @@
 import express from 'express'
 import bodyParser from 'body-parser'
-import { GenreList } from './TMDB/shows.js'
+import {
+    getGenreList,
+    discoverShows,
+    getPopularShows,
+    getTopShows,
+    searchAll,
+    showStreaming
+} from './TMDB/shows.js'
 
 // Constants
 const app = express();
@@ -19,7 +26,23 @@ app.use(
 
 /*
 */
-app.get('/backend/api/TMDB/:ShowType/genre/', GenreList);
+const routes = {
+    getGenreList: "/backend/api/TMDB/:showType/genre/",
+    discoverShows: '/backend/api/TMDB/:showType/discover/:pag',
+    getPopularShows: '/backend/api/TMDB/:showType/popular/:pag',
+    getTopShows: '/backend/api/TMDB/:showType/topRate/:pag',
+    searchAll: '/backend/api/TMDB/:showType/search/:show/:pag',
+    showStreaming: '/backend/api/TMDB/:showType/streaming/:showId',
+}
+
+/*
+*/
+app.get(routes.getGenreList, getGenreList);
+app.get(routes.discoverShows, discoverShows);
+app.get(routes.getPopularShows, getPopularShows);
+app.get(routes.getTopShows, getTopShows);
+app.get(routes.searchAll, searchAll);
+app.get(routes.showStreaming, showStreaming);
 
 /*
 */
@@ -31,7 +54,11 @@ app.get('/backend/api/TMDB/:ShowType/genre/', GenreList);
 */
 // app.delete('/backend/api/', deleteTags);
 
+app.get('/', (req, res) => {
+    res.status(200).json(routes);
+})
+
 // Server
 app.listen(PORT, () => {
-    console.log(`Running on http:/localhost:${PORT}`);
+    console.log(`Running on http://localhost:${PORT}`);
 });

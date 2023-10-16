@@ -3,100 +3,102 @@ import { options, language } from './conection.js'
 
 // showType = tv | movie
 
-const InvalidShowType = {
-    success: false,
-    status_code: 1,
-    status_message: "Invalid Show Type. Only 'movie' and 'tv' are allowed."
-};
+/**
+ * For now, errors are being handled through the TMDB API.
+ */
 
-export async function GenreList(req, res) {
-    const showType = req.params.ShowType;
+export async function getGenreList(req, res) {
+    const showType = req.params.showType;
 
     const url = `https://api.themoviedb.org/3/genre/${showType}/list?language=${language}`;
     
     const result = await fetch(url, options)
         .then(res => res.json())
         .then(json => {
-            return json.genres ? { success: true, genres: json.genres } : InvalidShowType;
+            return json.genres ? { success: true, result: json } : json;
         })
-        .catch(err => { return err; });
+        .catch(err => res.status(500).json(err));
+        // 500 makes sense in APIs?
     
     res.status(200).json(result);
 }
 
-export function descoverShows(showType, pag){
-    let url = `https://api.themoviedb.org/3/discover/${showType}?include_adult=false&language=${language}&page=${pag}&sort_by=popularity.desc`;
+export async function discoverShows(req, res){
+    const showType = req.params.showType;
+    const pag = req.params.pag;
 
-    const result = fetch(url, options)
+    const url = `https://api.themoviedb.org/3/discover/${showType}?include_adult=false&language=${language}&page=${pag}&sort_by=popularity.desc`;
+
+    const result = await fetch(url, options)
         .then(res => res.json())
-        .then(json => { return json })
-        .catch(err => console.error('error:' + err));
+        .then(json => {
+            return json.page ? { success: true, result: json } : json;
+        })
+        .catch(err => res.status(500).json(err));
     
-    return result;
+    res.status(200).json(result);
 }
 
-export function getPopularShows(showType, pag){
-    let url = `https://api.themoviedb.org/3/${showType}/popular?language=${language}&page=${pag}`;
+export async function getPopularShows(req, res){
+    const showType = req.params.showType;
+    const pag = req.params.pag;
 
-    const result = fetch(url, options)
+    const url = `https://api.themoviedb.org/3/${showType}/popular?language=${language}&page=${pag}`;
+
+    const result = await fetch(url, options)
         .then(res => res.json())
-        .then(json => { return json })
-        .catch(err => console.error('error:' + err));
+        .then(json => {
+            return json.page ? { success: true, result: json } : json;
+        })
+        .catch(err => res.status(500).json(err));
 
-    return result;
+    res.status(200).json(result);
 }
 
-export function getTopShows(showType, pag){
-    let url = `https://api.themoviedb.org/3/${showType}/top_rated?language=${language}&page=${pag}`;
+export async function getTopShows(req, res){
+    const showType = req.params.showType;
+    const pag = req.params.pag;
+    
+    const url = `https://api.themoviedb.org/3/${showType}/top_rated?language=${language}&page=${pag}`;
 
-    const result = fetch(url, options)
+    const result = await fetch(url, options)
         .then(res => res.json())
-        .then(json => { return json })
-        .catch(err => console.error('error:' + err));
+        .then(json => {
+            return json.page ? { success: true, result: json } : json;
+        })
+        .catch(err => res.status(500).json(err));
         
-    return result;
+    res.status(200).json(result);
 }
 
-export function searchShow(showType, show, pag){
-    let url = `https://api.themoviedb.org/3/search/${showType}?query=${show}&include_adult=false&language=${language}&page=${pag}`;
+export async function searchAll(req, res){
+    // showType = tv | movie | multi | person
+    const { showType, show, pag } = req.params;
 
-    const result = fetch(url, options)
+    const url = `https://api.themoviedb.org/3/search/${showType}?query=${show}&include_adult=false&language=${language}&page=${pag}`;
+
+    const result = await fetch(url, options)
         .then(res => res.json())
-        .then(json => { return json })
-        .catch(err => console.error('error:' + err));
+        .then(json => {
+            return json.page ? { success: true, result: json } : json;
+        })
+        .catch(err => res.status(500).json(err));
 
-    return result;
+    res.status(200).json(result);
 }
 
-export function showStreaming(showType, id){
-    let url = `https://api.themoviedb.org/3/${showType}/${id}/watch/providers`;
+export async function showStreaming(req, res){
+    // TEST: showId = 176
+    const { showType, showId } = req.params;
 
-    const result = fetch(url, options)
+    const url = `https://api.themoviedb.org/3/${showType}/${showId}/watch/providers`;
+
+    const result = await fetch(url, options)
         .then(res => res.json())
-        .then(json => { return json.results.US })
-        .catch(err => console.error('error:' + err));
+        .then(json => {
+            return json.id ? { success: true, result: json.results.BR } : json
+        })
+        .catch(err => res.status(500).json(err));
 
-    return result;
-}
-
-export function searchAll(pag){
-    let url = `https://api.themoviedb.org/3/search/multi?include_adult=false&language=${language}&page=${pag}`;
-
-    const result = fetch(url, options)
-        .then(res => res.json())
-        .then(json => { return json })
-        .catch(err => console.error('error:' + err));
-
-    return result;
-}
-
-export function searchPerson(pag){
-    let url = `https://api.themoviedb.org/3/search/person?include_adult=false&language=${language}&page=${pag}`;
-
-    const result = fetch(url, options)
-        .then(res => res.json())
-        .then(json => { return json })
-        .catch(err => console.error('error:' + err));
-
-    return result;
+    res.status(200).json(result);
 }

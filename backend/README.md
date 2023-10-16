@@ -8,3 +8,7 @@ The TMDB (The Movie Data Base) API is used to obtain movie data, but all other d
 
  - MySQL Container for user data.
  - Consume APIs to obtain data from movies.
+
+## References
+
+ - https://restfulapi.net/http-status-codes/
