@@ -1,0 +1,3 @@
+docker-compose up -d
+docker-compose down
+docker exec -it reviews mysql -u root -p db

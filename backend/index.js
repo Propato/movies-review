@@ -6,7 +6,8 @@ import {
     getPopularShows,
     getTopShows,
     searchAll,
-    showStreaming
+    showStreaming,
+    getShowById
 } from './TMDB/shows.js'
 
 // Constants
@@ -33,6 +34,7 @@ const routes = {
     getTopShows: '/backend/api/TMDB/:showType/topRate/:pag',
     searchAll: '/backend/api/TMDB/:showType/search/:show/:pag',
     showStreaming: '/backend/api/TMDB/:showType/streaming/:showId',
+    getShowById: '/backend/api/TMDB/:showType/:showId',
 }
 
 /*
@@ -43,6 +45,7 @@ app.get(routes.getPopularShows, getPopularShows);
 app.get(routes.getTopShows, getTopShows);
 app.get(routes.searchAll, searchAll);
 app.get(routes.showStreaming, showStreaming);
+app.get(routes.getShowById, getShowById);
 
 /*
 */

@@ -8,8 +8,6 @@
 *lerna-debug.log*
 
 */node_modules
-*/package-lock.json
-*/package-lock.json
 *.local
 
 # Editor directories and files

@@ -1,0 +1,3 @@
+-- CREATE FUNCTION login (email, senha): return id, nome.
+-- https://www.w3schools.com/mysql/mysql_ref_functions.asp
+-- https://dev.mysql.com/doc/refman/8.0/en/create-function.html
