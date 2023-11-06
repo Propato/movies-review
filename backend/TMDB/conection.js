@@ -13,7 +13,7 @@ export const options = {
 };
 
 // Autenticação do token
-
+// Função não é executada.
 export async function authentication() {
     const url = 'https://api.themoviedb.org/3/authentication';
 

@@ -1,0 +1,35 @@
+# How to run it:
+#   docker-compose up -d
+#
+# How to stop it:
+#   docker-compose down
+
+version: "3.9"
+
+services:
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+    - 8080:8080
+    volumes:
+    - .:/app
+    - '/app/node_modules'
+    depends_on:
+      - db
+
+  db:
+    image: mysql:8
+    container_name: reviews
+    environment:
+      - MYSQL_USER=propato
+      - MYSQL_PASSWORD=senha
+      - MYSQL_ROOT_PASSWORD=senha
+    volumes:
+      - ./db/DDS:/docker-entrypoint-initdb.d
+      - db_data:/var/lib/mysql
+
+volumes:
+  db_data:

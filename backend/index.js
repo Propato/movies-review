@@ -1,5 +1,6 @@
 import express from 'express'
 import bodyParser from 'body-parser'
+import mysql from 'mysql2';
 import {
     getGenreList,
     discoverShows,
@@ -10,10 +11,13 @@ import {
     getShowById
 } from './TMDB/shows.js'
 
+// https://www.youtube.com/watch?v=9-iLqe-E9iI
+
 // Constants
 const app = express();
 const PORT = 8080;
 // const HOST = '0.0.0.0';
+let con = null;
 
 // Configs
 app.use(bodyParser.json());
@@ -22,6 +26,27 @@ app.use(
         extended: true,
     })
 );
+
+const mysqlConfig = {
+    host: 'mysql_server',
+    user: 'propato',
+    password: 'propato',
+    database: 'db'
+};
+
+// Server
+
+app.get('/', (req, res) => {
+    res.send('hello word');
+});
+
+app.get('/connect', (req, res) => {
+    con = mysql.createConnection(mysqlConfig);
+    con.connect((err) => {
+        if(err) throw err;
+        res.send('connected');
+    });
+});
 
 // ROUTES
 
