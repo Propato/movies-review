@@ -15,11 +15,11 @@ CREATE TABLE `Users` (
 
     CONSTRAINT `usersPK` PRIMARY KEY (`id`),
     UNIQUE (`email`)
-) ENGINE=InnoDB;
+);
 
 CREATE INDEX idxLogin
 ON Users (`email`, `password`)
-USING HASH
+USING BTREE
 ;
 
 -- Definição da tabela Reviews.
@@ -31,11 +31,27 @@ CREATE TABLE `Reviews` (
     `review` VARCHAR(120) NOT NULL,
 
     CONSTRAINT `reviewsPK` PRIMARY KEY (`movieId`, `userId`),
-    CONSTRAINT "reviewsFK" FOREIGN KEY (userId) REFERENCES Users(id) ON UPDATE CASCADE ON DELETE CASCADE
-) ENGINE=InnoDB;
+    CONSTRAINT `reviewsFK` FOREIGN KEY (userId) REFERENCES Users(id) ON UPDATE CASCADE ON DELETE CASCADE
+);
 
 CREATE INDEX idxUserReviews
 ON Reviews (`userId` ASC)
+USING BTREE
+;
+
+DROP TABLE IF EXISTS `List`;
+CREATE TABLE `List` (
+    `id` MEDIUMINT UNSIGNED NOT NULL AUTO_INCREMENT,
+    `userId` MEDIUMINT UNSIGNED NOT NULL,
+    `name` VARCHAR(30) NOT NULL,
+
+    CONSTRAINT `listPK` PRIMARY KEY (`id`),
+    UNIQUE (`userId`, `name`),
+    CONSTRAINT `listFK` FOREIGN KEY (userId) REFERENCES Users(id) ON UPDATE CASCADE ON DELETE CASCADE
+);
+
+CREATE INDEX idxList
+ON List (`userId` ASC)
 USING BTREE
 ;
 
@@ -43,13 +59,13 @@ USING BTREE
 DROP TABLE IF EXISTS `MovieList`;
 CREATE TABLE `MovieList` (
     `movieId` VARCHAR(20) NOT NULL,
-    `userId` MEDIUMINT UNSIGNED NOT NULL,
+    `listId` MEDIUMINT UNSIGNED NOT NULL,
 
-    CONSTRAINT `reviewsPK` PRIMARY KEY (`movieId`, `userId`),
-    CONSTRAINT "reviewsFK" FOREIGN KEY (userId) REFERENCES Users(id) ON UPDATE CASCADE ON DELETE CASCADE
-) ENGINE=InnoDB;
+    CONSTRAINT `movieListPK` PRIMARY KEY (`movieId`, `listId`),
+    CONSTRAINT `movieListFK` FOREIGN KEY (listId) REFERENCES List(id) ON UPDATE CASCADE ON DELETE CASCADE
+);
 
 CREATE INDEX idxUserList
-ON MovieList (`userId` ASC)
+ON MovieList (`listId` ASC)
 USING BTREE
 ;
