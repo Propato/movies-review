@@ -1,7 +1,7 @@
 FROM node:18
 
 # Create app directory
-WORKDIR /src/app
+WORKDIR /app
 
 # Install app dependencies
 # A wildcard is used to ensure both package.json AND package-lock.json are copied
@@ -10,12 +10,11 @@ COPY ./package*.json ./
 
 # Bundle app source
 COPY . .
-# copying everything?!
 
 RUN npm install
 
 EXPOSE 8080
 
-VOLUME [ "/src/app/node_modules" ]
+VOLUME [ "/app/node_modules" ]
 
 CMD [ "npm", "run", "start" ]

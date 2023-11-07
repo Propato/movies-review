@@ -12,6 +12,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
+    container_name: server
     ports:
     - 8080:8080
     volumes:
@@ -22,13 +23,13 @@ services:
 
   db:
     image: mysql:8
-    container_name: reviews
+    container_name: mysql
     environment:
       - MYSQL_USER=propato
       - MYSQL_PASSWORD=senha
       - MYSQL_ROOT_PASSWORD=senha
     volumes:
-      - ./db/DDS:/docker-entrypoint-initdb.d
+      - ./MySQL/DDL:/docker-entrypoint-initdb.d
       - db_data:/var/lib/mysql
 
 volumes:

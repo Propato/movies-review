@@ -36,10 +36,6 @@ const mysqlConfig = {
 
 // Server
 
-app.get('/', (req, res) => {
-    res.send('hello word');
-});
-
 app.get('/connect', (req, res) => {
     con = mysql.createConnection(mysqlConfig);
     con.connect((err) => {
