@@ -11,16 +11,3 @@ export const options = {
         Authorization: `Bearer ${APItoken}`
     }
 };
-
-// Autenticação do token
-// Função não é executada.
-export async function authentication() {
-    const url = 'https://api.themoviedb.org/3/authentication';
-
-    const conection = await fetch(url, options)
-        .then(res => res.json())
-        .then(json => { return json.success } )
-        .catch(err => console.error('error:' + err));
-
-    return conection;
-}

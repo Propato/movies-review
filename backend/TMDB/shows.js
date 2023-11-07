@@ -7,8 +7,21 @@ import { options, language } from './conection.js'
  * For now, errors are being handled through the TMDB API.
  */
 
+// Autenticação do token
+export async function authentication(req, res) {
+    const url = 'https://api.themoviedb.org/3/authentication';
+
+    await fetch(url, options)
+        .then(res => res.json())
+        .then(json => {
+            const status = json.success ? 200 : 500;
+            res.status(status).json(json);
+        })
+        .catch(err => res.status(500).json(err));
+}
+
 export async function getGenreList(req, res) {
-    const showType = req.params.showType;
+    const { showType } = req.params;
 
     const url = `https://api.themoviedb.org/3/genre/${showType}/list?language=${language}`;
     
@@ -22,8 +35,7 @@ export async function getGenreList(req, res) {
 }
 
 export async function discoverShows(req, res){
-    const showType = req.params.showType;
-    const pag = req.params.pag;
+    const { showType, pag } = req.params;
 
     const url = `https://api.themoviedb.org/3/discover/${showType}?include_adult=false&language=${language}&page=${pag}&sort_by=popularity.desc`;
 
@@ -37,8 +49,7 @@ export async function discoverShows(req, res){
 }
 
 export async function getPopularShows(req, res){
-    const showType = req.params.showType;
-    const pag = req.params.pag;
+    const { showType, pag } = req.params;
 
     const url = `https://api.themoviedb.org/3/${showType}/popular?language=${language}&page=${pag}`;
 
@@ -52,8 +63,7 @@ export async function getPopularShows(req, res){
 }
 
 export async function getTopShows(req, res){
-    const showType = req.params.showType;
-    const pag = req.params.pag;
+    const { showType, pag } = req.params;
     
     const url = `https://api.themoviedb.org/3/${showType}/top_rated?language=${language}&page=${pag}`;
 
