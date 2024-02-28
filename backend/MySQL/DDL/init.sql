@@ -7,11 +7,13 @@ USE `db`;
 DROP TABLE IF EXISTS `Users`;
 CREATE TABLE `Users` (
     `id` MEDIUMINT UNSIGNED NOT NULL AUTO_INCREMENT,
-    `name` VARCHAR(30) NOT NULL,
+    `name` VARCHAR(50) NOT NULL,
     `birthday` DATE NOT NULL,
 
     `email` VARCHAR(60) NOT NULL,
     `password` VARCHAR(30) NOT NULL,
+
+    `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 
     CONSTRAINT `usersPK` PRIMARY KEY (`id`),
     UNIQUE (`email`)
@@ -69,3 +71,7 @@ CREATE INDEX idxUserList
 ON MovieList (`listId` ASC)
 USING BTREE
 ;
+
+
+
+INSERT INTO `Users` (`name`, `birthday`, `email`, `password`) VALUES ('aaa', '2023-10-10', 'david@propato.com', '1234');

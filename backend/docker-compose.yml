@@ -12,12 +12,12 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    container_name: server
+    container_name: backend_server
     ports:
     - 8080:8080
     volumes:
+    - node:/app/node_modules
     - .:/app
-    - '/app/node_modules'
     depends_on:
       - db
 
@@ -34,3 +34,4 @@ services:
 
 volumes:
   db_data:
+  node:

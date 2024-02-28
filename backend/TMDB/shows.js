@@ -8,16 +8,15 @@ import { options, language } from './conection.js'
  */
 
 // Autenticação do token
-export async function authentication(req, res) {
+export async function authentication() {
     const url = 'https://api.themoviedb.org/3/authentication';
 
-    await fetch(url, options)
+    return await fetch(url, options)
         .then(res => res.json())
         .then(json => {
-            const status = json.success ? 200 : 500;
-            res.status(status).json(json);
+            return json.success;
         })
-        .catch(err => res.status(500).json(err));
+        .catch(err => { return err });
 }
 
 export async function getGenreList(req, res) {

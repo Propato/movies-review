@@ -15,6 +15,4 @@ RUN npm install
 
 EXPOSE 8080
 
-VOLUME [ "/app/node_modules" ]
-
 CMD [ "npm", "run", "start" ]

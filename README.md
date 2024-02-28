@@ -1,4 +1,5 @@
 # Movies Review
+
 This is a project for a full stack web system using HTML, CSS, JavaScript and NodeJS.
 
 The objective is to create a website with different movies, series, animes, etc. separated by genre.
@@ -13,16 +14,16 @@ A possible improvement in this project is to make comments and notes public or p
 
 List of possible APIs to be used in this project:
 
- - The Movie Database (TMDb): Movies and TV shows
- - Open Movie Database (OMDb) API: Movies and TV shows
- - AniList API: Animes, mangas and characters
- - JustWatch API: Where to watch movies and TV shows
+- The Movie Database (TMDb): Movies and TV shows
+- Open Movie Database (OMDb) API: Movies and TV shows
+- AniList API: Animes, mangas and characters
+- JustWatch API: Where to watch movies and TV shows
 
 ## Sources
 
 Sites that were or could be useful throughout the development of this project.
 
- - https://nodejs.org/en/docs/guides/nodejs-docker-webapp#create-the-nodejs-app
- - https://dev.to/ogwurujohnson/
- - persisting-a-node-api-with-postgresql-without-the-help-of-orms-like-sequelize-5dc5
- - https://vitejs.dev/guide/
+- <https://nodejs.org/en/docs/guides/nodejs-docker-webapp#create-the-nodejs-app>
+- <https://dev.to/ogwurujohnson/>
+- <https://dev.to/ogwurujohnson/-persisting-a-node-api-with-postgresql-without-the-help-of-orms-like-sequelize-5dc5>
+- <https://vitejs.dev/guide/>

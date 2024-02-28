@@ -8,5 +8,7 @@ export const routes = {
     showStreaming: '/backend/api/TMDB/:showType/streaming/:showId',
     getShowById: '/backend/api/TMDB/:showType/:showId',
 
-    login: '/backend/api/db/login'
+    login: '/backend/api/db/login',
+    teste1: '/backend/api/db/teste/1',
+    teste2: '/backend/api/db/teste/2'
 }
