@@ -1,37 +1,58 @@
 # How to run it:
-#   docker-compose up -d
+#   docker-compose up -d --build
 #
 # How to stop it:
 #   docker-compose down
 
 version: "3.9"
 
-services:
+services: 
+
+  mysqldb:
+    image: mysql:8
+    container_name: db-reviews
+    command: --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+    restart: unless-stopped
+    volumes:
+      - ./db/init.sql:/docker-entrypoint-initdb.d/0_init.sql
+      - database:/var/lib/mysql
+      # -database:/var/lib/mysql
+    ports:
+      - 3000:3306
+    environment:
+      MYSQL_DATABASE: db
+      MYSQL_USER: review-admin
+      MYSQL_PASSWORD: propato
+      MYSQL_ROOT_PASSWORD: propato
+      SERVICE_TAGS: prod
+      SERVICE_NAME: mysqldb
+    networks:
+      - reviews
 
   app:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    container_name: backend_server
-    ports:
-    - 8080:8080
-    volumes:
-    - node:/app/node_modules
-    - .:/app
-    depends_on:
-      - db
-
-  db:
-    image: mysql:8
-    container_name: mysql
+    container_name: app-reviews
+    build: .
+    image: app:v1
     environment:
-      - MYSQL_USER=propato
-      - MYSQL_PASSWORD=senha
-      - MYSQL_ROOT_PASSWORD=senha
-    volumes:
-      - ./MySQL/DDL:/docker-entrypoint-initdb.d
-      - db_data:/var/lib/mysql
+      DB_HOST: mysqldb
+      DB_USER: review-admin
+      DB_PASSWORD: 'propato'
+      DB_NAME: db
+      DB_PORT: 3000
+      DB_CONNECTION_LIMIT: 10
+      SERVER_PORT: 8000
+      SERVICE_TAGS: prod
+      SERVICE_NAME: appservice
+    ports:
+      - 8000:8000
+    depends_on:
+      - mysqldb
+    networks:
+      - reviews
 
 volumes:
-  db_data:
-  node:
+  database:
+
+networks:
+  reviews:
+    driver: bridge

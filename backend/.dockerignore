@@ -1,7 +1,10 @@
-./MySQL
-./node_modules
-./docker-compose.yml
-./Dockerfile
-./notes.txt
-./README.md
-./.dockerignore
+LICENSE
+README.md
+.git
+.gitignore
+.vscode
+db
+node_module
+docker-compose.yml
+Dockerfile
+.dockerignore

@@ -27,9 +27,9 @@ USING BTREE
 -- Definição da tabela Reviews.
 DROP TABLE IF EXISTS `Reviews`;
 CREATE TABLE `Reviews` (
-    `movieId` VARCHAR(20) NOT NULL,
     `userId` MEDIUMINT UNSIGNED NOT NULL,
-    `rate` CHAR(1) NOT NULL,
+    `movieId` VARCHAR(20) NOT NULL,
+    `rate` CHAR(3) NOT NULL,
     `review` VARCHAR(120) NOT NULL,
 
     CONSTRAINT `reviewsPK` PRIMARY KEY (`movieId`, `userId`),
@@ -43,12 +43,12 @@ USING BTREE
 
 DROP TABLE IF EXISTS `List`;
 CREATE TABLE `List` (
-    `id` MEDIUMINT UNSIGNED NOT NULL AUTO_INCREMENT,
+    `listId` MEDIUMINT UNSIGNED NOT NULL AUTO_INCREMENT,
     `userId` MEDIUMINT UNSIGNED NOT NULL,
-    `name` VARCHAR(30) NOT NULL,
+    `listName` VARCHAR(30) NOT NULL,
 
-    CONSTRAINT `listPK` PRIMARY KEY (`id`),
-    UNIQUE (`userId`, `name`),
+    CONSTRAINT `listPK` PRIMARY KEY (`listId`),
+    UNIQUE (`userId`, `listName`),
     CONSTRAINT `listFK` FOREIGN KEY (userId) REFERENCES Users(id) ON UPDATE CASCADE ON DELETE CASCADE
 );
 
@@ -58,20 +58,18 @@ USING BTREE
 ;
 
 -- Definição da tabela MovieList.
-DROP TABLE IF EXISTS `MovieList`;
-CREATE TABLE `MovieList` (
+DROP TABLE IF EXISTS `MovieFromList`;
+CREATE TABLE `MovieFromList` (
     `movieId` VARCHAR(20) NOT NULL,
     `listId` MEDIUMINT UNSIGNED NOT NULL,
 
     CONSTRAINT `movieListPK` PRIMARY KEY (`movieId`, `listId`),
-    CONSTRAINT `movieListFK` FOREIGN KEY (listId) REFERENCES List(id) ON UPDATE CASCADE ON DELETE CASCADE
+    CONSTRAINT `movieListFK` FOREIGN KEY (listId) REFERENCES List(listId) ON UPDATE CASCADE ON DELETE CASCADE
 );
 
 CREATE INDEX idxUserList
-ON MovieList (`listId` ASC)
+ON MovieFromList (`listId` ASC)
 USING BTREE
 ;
 
-
-
-INSERT INTO `Users` (`name`, `birthday`, `email`, `password`) VALUES ('aaa', '2023-10-10', 'david@propato.com', '1234');
+-- EXEMPLO: INSERT INTO `Users` (`name`, `birthday`, `email`, `password`) VALUES ('aaa', '2023-10-10', 'david@propato.com', '1234');

@@ -27,3 +27,4 @@ Sites that were or could be useful throughout the development of this project.
 - <https://dev.to/ogwurujohnson/>
 - <https://dev.to/ogwurujohnson/-persisting-a-node-api-with-postgresql-without-the-help-of-orms-like-sequelize-5dc5>
 - <https://vitejs.dev/guide/>
+- <https://www.youtube.com/watch?v=aUMGAFE5pPM> (the most important for backend)

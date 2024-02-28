@@ -14,3 +14,4 @@ The TMDB (The Movie Data Base) API is used to obtain movie data, but all other d
 - <https://dev.mysql.com/doc/refman/8.0/en/preface.html>
 - <https://restfulapi.net/http-status-codes/>
 - <https://onecompiler.com/mysql/3zqq5a3kq>
+- <https://www.youtube.com/watch?v=aUMGAFE5pPM> (the most important for backend)
