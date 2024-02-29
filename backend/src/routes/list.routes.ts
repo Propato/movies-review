@@ -1,19 +1,21 @@
-// import { Router } from 'express';
-// import { createList, deleteList, deleteFromList, getList, getLists, updateList, insertList } from '../controller/list.controller';
+import { Router } from 'express';
+import { createList, deleteList, deleteFromList, getMoviesFromList, getLists, updateList, insertInList } from '../controller/list.controller';
 
-// const listRoutes = Router();
+const listRoutes = Router();
 
-// listRoutes.route('/:userId')
-//     .get(getLists)
-//     .post(createList);
+listRoutes.route('/')
+    .post(createList);
 
-// listRoutes.route('/:userId/:listId')
-//     .get(getList)
-//     .put(updateList)
-//     .post(insertList)
-//     .delete(deleteList);
+listRoutes.route('/all/:userId')
+    .get(getLists);
 
-// listRoutes.route('/:userId/:listId/:movieId')
-//     .delete(deleteFromList);
+listRoutes.route('/:listId')
+    .get(getMoviesFromList)
+    .put(updateList)
+    .post(insertInList)
+    .delete(deleteList);
 
-// export default listRoutes;
+listRoutes.route('/:listId/:movieId')
+    .delete(deleteFromList);
+
+export default listRoutes;

@@ -1,9 +1,9 @@
-// import listRoutes from './list.routes';
+import listRoutes from './list.routes';
 import reviewRoutes from './review.routes';
 import userRoutes from './user.routes';
 
 export { 
-    // listRoutes,
+    listRoutes,
     reviewRoutes,
     userRoutes
 }
