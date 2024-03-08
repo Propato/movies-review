@@ -4,7 +4,7 @@ import ip from "ip";
 import { Code } from "./enum/code.enum";
 import { Status } from "./enum/status.enum";
 import { HttpResponse } from "./domain/response";
-import { userRoutes , reviewRoutes, listRoutes } from "./routes/";
+import { userRoutes , reviewRoutes, listRoutes, showRoutes } from "./routes/";
 
 export class App {
     private readonly app: Application;
@@ -31,6 +31,7 @@ export class App {
         this.app.use('/users', userRoutes);
         this.app.use('/reviews', reviewRoutes);
         this.app.use('/list', listRoutes);
+        this.app.use('/shows', showRoutes);
         this.app.get('/', (req: Request, res: Response) => {
             res.status(Code.OK).send(new HttpResponse(Code.OK, Status.OK, 'Welcome to the Backend API of the Movies Reviews App'))
         });
