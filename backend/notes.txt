@@ -3,18 +3,4 @@ docker-compose down -v
 docker exec -it mysql mysql -u root -p db
 Para sair do container: Ctrl + D
 
-
-Refazer o banco de dados:
-
-Entidades: Usuario, Listas, Shows (shows salvos nas listas, ShowId e ListaId) e Avaliações
-
 Sempre q um usuario for criado, ele tera as listas: Favoritos, Assistir Depois e Avaliações.
-
-Avaliações:
-    UserID
-    MovieID
-    Nota
-    Comentario/texto
-    publico/privado
-
-todos os filmes avaliados serao salvos na lista Avaliações
