@@ -1,30 +1,21 @@
 # Movies Review
 
-This is a project for a full stack web system using HTML, CSS, JavaScript and NodeJS.
+This is a project for a full stack web system using many tools.
 
-The objective is to create a website with different movies, series, animes, etc. separated by genre.
+The objective is to create a website with different movies, series, etc. where the users can login and make notes and lists about the shows.
 
-The idea is to use one or more APIs to obtain data about movies and together have a database for system-specific information, such as users and their data.
+The idea is to use The Movie DataBase API to obtain data about movies and together have a database for system-specific information, such as users and their own data.
 
-User profiles and CRUD will be developed, which will be able to have personalized lists of movies and will be able to give ratings and comments about them.
+## Tools
 
-A possible improvement in this project is to make comments and notes public or private and social interaction between the users.
+### Backend
 
-## APIs
+| <img alt="Icon TypeScript" title="TypeScript" height="60" src=""> | <img alt="Icon Node" title="Node" height="60" src=""> | <img alt="Icon MySQL" title="MySQL" height="60" src=""> | <img alt="Icon Docker" title="Docker" height="60" src=""> |
+| :----------: | :-------------: | :------: | :------: |
+| TypeScript | Node | MySQL | Docker |
 
-List of possible APIs to be used in this project:
+### Frontend
 
-- The Movie Database (TMDb): Movies and TV shows
-- Open Movie Database (OMDb) API: Movies and TV shows
-- AniList API: Animes, mangas and characters
-- JustWatch API: Where to watch movies and TV shows
+loading...
 
-## Sources
-
-Sites that were or could be useful throughout the development of this project.
-
-- <https://nodejs.org/en/docs/guides/nodejs-docker-webapp#create-the-nodejs-app>
-- <https://dev.to/ogwurujohnson/>
-- <https://dev.to/ogwurujohnson/-persisting-a-node-api-with-postgresql-without-the-help-of-orms-like-sequelize-5dc5>
-- <https://vitejs.dev/guide/>
-- <https://www.youtube.com/watch?v=aUMGAFE5pPM> (the most important for backend)
+<h6 align="center">by [David Propato](https://github.com/Propato)</h6>
