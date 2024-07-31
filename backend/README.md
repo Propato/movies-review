@@ -1,6 +1,16 @@
 # Backend
 
-The backend consists of a docker network with two containers, running the MySQL and TypeScript Server. MySQL has User, List and Reviews tables. TS define the EndPoints, so they can be easily found in the 'routes' directory.
+## Refactoring
+
+I'm currently refactoring the backend. I have rebuilt the SQL tables and will now recode the API to match the new database.
+
+## Data Diagram
+
+<img src="./db/model/data-diagram.png" alt="Data Diagram">
+
+## Description
+
+The backend consists of a docker network with two containers, one running the MySQL and the another the Node Server. MySQL has User, List and Reviews tables. Node with TS defines the EndPoints. They can be easily found in the 'routes' directory.
 
 The TMDB (The Movie Data Base) API is used to obtain movie data, but all other data is stored in this application's own system.
 
@@ -9,8 +19,14 @@ The TMDB (The Movie Data Base) API is used to obtain movie data, but all other d
 This application is a basic version, as there are several possible improvements, such as the handling of errors and exceptions completely, but this basic form will serve this personal purpose.
 
 ## To Do
+ 
+### Triggers 
 
-Whenever a user is created, they will have the lists: Favorites, Watch Later and Reviews.
+Whenever a user is created, they will have the following lists:
+
+ - Favorites,
+ - Watch Later,
+ - Reviews.
 
 ## References
 

@@ -23,9 +23,9 @@ services:
       - database:/var/lib/mysql
       # -database:/var/lib/mysql
     ports:
-      - 3000:3306
+      - 3000:3000
     environment:
-      MYSQL_DATABASE: db
+      MYSQL_DATABASE: movies-db
       MYSQL_USER: review-admin
       MYSQL_PASSWORD: propato
       MYSQL_ROOT_PASSWORD: propato
@@ -42,7 +42,7 @@ services:
       DB_HOST: mysqldb
       DB_USER: review-admin
       DB_PASSWORD: 'propato'
-      DB_NAME: db
+      DB_NAME: movies-db
       DB_PORT: 3000
       DB_CONNECTION_LIMIT: 10
       SERVER_PORT: 8000
