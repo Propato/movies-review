@@ -3,7 +3,7 @@ import { HttpResponse } from "../domain/response";
 import axios, { AxiosResponse } from 'axios';
 import { Request, Response } from "express";
 import { Code, Status } from "../enum";
-import { language, options } from "../config/moviedb.config";
+import { language, options } from "../config/moviedb.API.config";
 
 // showType = 'tv' | 'movie'
 

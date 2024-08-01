@@ -8,9 +8,6 @@
 #     docker exec -it mysql mysql -u root -p db
 # Close container:
 #     Ctrl + D
-
-version: "3.9"
-
 services: 
 
   mysqldb:

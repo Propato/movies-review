@@ -11,8 +11,8 @@ CREATE TABLE `Users` (
     `birthday` DATE,
 
     `email` VARCHAR(60) NOT NULL,
-    `passhash` VARCHAR(30) NOT NULL,
-    `passcode` VARCHAR(10) NOT NULL,
+    `passhash` VARCHAR(100) NOT NULL,
+    -- `passcode` VARCHAR(10) NOT NULL,
 
     `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 
