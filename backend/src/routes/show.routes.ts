@@ -1,6 +1,6 @@
 import { Router } from 'express';
 // import { getShow, getGenreList, discoverShows, getPopularShows, getTopShows, searchShow, getStreamingFromShow } from '../controller/show.controller';
-import { discoverShows, getGenreList, getPopularShows, getShowById, getStreamingForShow, getTopShows, searchShow } from '../controller/show.controller';
+import { discoverShows, getGenreList, getPopularShows, getShowById, getStreamingForShow, getTopShows, searchShow } from '../controllers/show.controller';
 
 const showRoutes = Router();
 

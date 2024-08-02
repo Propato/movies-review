@@ -1,5 +1,5 @@
-import { Code } from "../enum/code.enum";
-import { Status } from "../enum/status.enum";
+import { Code } from "../enums/code.enum";
+import { Status } from "../enums/status.enum";
 
 export class HttpResponse{
     private timeStamp: string;

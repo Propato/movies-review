@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { createList, deleteList, deleteFromList, getMoviesFromList, getLists, updateList, insertInList } from '../controller/list.controller';
+import { createList, deleteList, deleteFromList, getMoviesFromList, getLists, updateList, insertInList } from '../controllers/list.controller';
 
 const listRoutes = Router();
 

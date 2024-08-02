@@ -1,10 +1,10 @@
 import { FieldPacket, ProcedureCallPacket, ResultSetHeader, RowDataPacket } from "mysql2";
-import { Review } from "../interface/review.interface";
-import { connection } from "../config/mysql.config";
-import { HttpResponse } from "../domain/response";
-import { QUERY } from "../query/review.query";
+import { Review } from "../interfaces/review.interface";
+import { connection } from "../configs/mysql.config";
+import { HttpResponse } from "../services/response";
+import { QUERY } from "../queries/review.query";
 import { Request, Response } from "express";
-import { Code, Status } from "../enum";
+import { Code, Status } from "../enums";
 
 type ResultSet = [ResultSetHeader | RowDataPacket[] | ResultSetHeader[] | RowDataPacket[][] | ProcedureCallPacket, FieldPacket[]];
 

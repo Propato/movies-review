@@ -1,9 +1,9 @@
 import cors from "cors";
 import express, { Application, Request, Response } from "express";
 import ip from "ip";
-import { Code } from "./enum/code.enum";
-import { Status } from "./enum/status.enum";
-import { HttpResponse } from "./domain/response";
+import { Code } from "./enums/code.enum";
+import { Status } from "./enums/status.enum";
+import { HttpResponse } from "./services/response";
 import { userRoutes , reviewRoutes, listRoutes, showRoutes } from "./routes/";
 
 export class App {
@@ -29,8 +29,8 @@ export class App {
 
     private routes(): void {
         this.app.use('/users', userRoutes);
+        this.app.use('/list', listRoutes);
         // this.app.use('/reviews', reviewRoutes);
-        // this.app.use('/list', listRoutes);
         // this.app.use('/shows', showRoutes);
 
         this.app.get('/', (req: Request, res: Response) => {

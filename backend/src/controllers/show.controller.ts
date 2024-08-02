@@ -1,9 +1,9 @@
 // import { Review } from "../interface/review.interface";
-import { HttpResponse } from "../domain/response";
+import { HttpResponse } from "../services/response";
 import axios, { AxiosResponse } from 'axios';
 import { Request, Response } from "express";
-import { Code, Status } from "../enum";
-import { language, options } from "../config/moviedb.API.config";
+import { Code, Status } from "../enums";
+import { language, options } from "../configs/moviedb.API.config";
 
 // showType = 'tv' | 'movie'
 
