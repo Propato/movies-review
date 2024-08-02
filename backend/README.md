@@ -19,14 +19,22 @@ The TMDB (The Movie Data Base) API is used to obtain movie data, but all other d
 This application is a basic version, as there are several possible improvements, such as the handling of errors and exceptions completely, but this basic form will serve this personal purpose.
 
 ## To Do
+
+### Transactions
+
+It is necessary to implement transactions so that, if the results of an operation are invalidated, what was done is undone.
  
-### Triggers 
+### Triggers
 
 Whenever a user is created, they will have the following lists:
 
  - Favorites,
  - Watch Later,
  - Reviews.
+
+### Exceptions
+
+It is important to handle exceptions correctly, identifying the error and returning the necessary data.
 
 ## References
 

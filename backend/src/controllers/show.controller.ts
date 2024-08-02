@@ -1,5 +1,5 @@
 // import { Review } from "../interface/review.interface";
-import { HttpResponse } from "../services/response";
+import { HttpResponse } from "../services/response.http";
 import axios, { AxiosResponse } from 'axios';
 import { Request, Response } from "express";
 import { Code, Status } from "../enums";

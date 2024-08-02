@@ -1,13 +1,11 @@
-import { FieldPacket, ProcedureCallPacket, ResultSetHeader, RowDataPacket } from "mysql2";
 import { User } from "../interfaces/user.interface";
 import { connection } from "../configs/mysql.config";
-import { HttpResponse } from "../services/response";
+import { HttpResponse } from "../services/response.http";
 import { Request, Response } from "express";
 import { QUERY } from "../queries/user.query";
 import { Code, Status } from "../enums/";
 import { checkPassword, hashPassword } from "../services/pass.crypto";
-
-type ResultSet = [ ResultSetHeader | RowDataPacket[] | ResultSetHeader[] | RowDataPacket[][] | ProcedureCallPacket, FieldPacket[]];
+import { ResultSet, validateCreate, validateDelete, validateUpdate } from "../services/queries.result";
 
 export const getUsers = async (req: Request, res: Response): Promise<Response<HttpResponse>> => {
     console.info(`[${new Date().toLocaleString()}] Incoming ${req.method}${req.originalUrl} Request from ${req.rawHeaders[0]} ${req.rawHeaders[1]}`);
@@ -17,6 +15,7 @@ export const getUsers = async (req: Request, res: Response): Promise<Response<Ht
         const result: ResultSet = await pool.query(QUERY.SELECT_ALL);
 
         return res.status(Code.OK).send(new HttpResponse(Code.OK, Status.OK, 'Users retrieved', result[0]));
+
     } catch (error: unknown) {
         console.error(error);
 
@@ -29,13 +28,13 @@ export const getUser = async (req: Request, res: Response): Promise<Response<Htt
 
     try {
         const pool = await connection();
-        const result: ResultSet = await pool.query(QUERY.SELECT, [req.params.userId]);
+        const result: ResultSet = await pool.query(QUERY.SELECT, [Number(req.params.userId)]);
 
-        if((result[0] as Array<ResultSet>).length > 0){
+        if((result[0] as Array<ResultSet>).length > 0)
             return res.status(Code.OK).send(new HttpResponse(Code.OK, Status.OK, 'User retrieved', result[0]));
-        } else {
-            return res.status(Code.NOT_FOUND).send(new HttpResponse(Code.NOT_FOUND, Status.NOT_FOUND, 'User not found'));
-        }
+
+        return res.status(Code.NOT_FOUND).send(new HttpResponse(Code.NOT_FOUND, Status.NOT_FOUND, 'User not found'));
+
     } catch (error: unknown) {
         console.error(error);
 
@@ -53,12 +52,16 @@ export const createUser = async (req: Request, res: Response): Promise<Response<
         const pool = await connection();
         const result_create: ResultSet = await pool.query(QUERY.CREATE, Object.values(user));
 
-        const result: ResultSet = await pool.query(QUERY.SELECT_EMAIL, [user.email]);
-        
-        if((result[0] as Array<ResultSet>).length > 0)
-            return res.status(Code.OK).send(new HttpResponse(Code.OK, Status.OK, 'User created', (result[0] as User[])[0]));
-        
-        return res.status(Code.BAD_REQUEST).send(new HttpResponse(Code.BAD_REQUEST, Status.BAD_REQUEST, 'An error occured', { "Result": result_create}));
+        user.id = validateCreate(result_create); // validate and return the user Id
+
+        if(user.id){
+            user.passhash = ""; // Dont send the passhash back
+
+            // A better way is make a SELECT and compare the user return with the user send to check if the update was really successful
+            return res.status(Code.OK).send(new HttpResponse(Code.OK, Status.OK, 'User created', user ));
+        }
+        return res.status(Code.BAD_REQUEST).send(new HttpResponse(Code.BAD_REQUEST, Status.BAD_REQUEST, 'An error occured', result_create));
+
     } catch (error: unknown) {
         console.error(error);
 
@@ -70,18 +73,25 @@ export const updateUser = async (req: Request, res: Response): Promise<Response<
     console.info(`[${new Date().toLocaleString()}] Incoming ${req.method}${req.originalUrl} Request from ${req.rawHeaders[0]} ${req.rawHeaders[1]}`);
 
     let user: User = { ...req.body };
+    const id = Number(req.params.userId);
 
     try {
         const pool = await connection();
-        const result: ResultSet = await pool.query(QUERY.SELECT, [req.params.userId]);
+        const result: ResultSet = await pool.query(QUERY.SELECT, [id]);
         
         if((result[0] as Array<ResultSet>).length > 0){
-            await pool.query(QUERY.UPDATE, [...Object.values(user), req.params.userId]);
+            const result: ResultSet = await pool.query(QUERY.UPDATE, [...Object.values(user), id]);
 
-            return res.status(Code.OK).send(new HttpResponse(Code.OK, Status.OK, 'User updated', {...user, id: req.params.userId }));
-        } else {
-            return res.status(Code.NOT_FOUND).send(new HttpResponse(Code.NOT_FOUND, Status.NOT_FOUND, 'User not found'));
+            if(validateUpdate(result)){
+                // A better way is make a SELECT and compare the user return with the user send to check if the update was really successful
+                user.id = id;
+                return res.status(Code.OK).send(new HttpResponse(Code.OK, Status.OK, 'User updated', user));
+            }
+            return res.status(Code.BAD_REQUEST).send(new HttpResponse(Code.BAD_REQUEST, Status.BAD_REQUEST, 'An error occured', result));
+
         }
+        return res.status(Code.NOT_FOUND).send(new HttpResponse(Code.NOT_FOUND, Status.NOT_FOUND, 'User not found'));
+
     } catch (error: unknown) {
         console.error(error);
 
@@ -93,26 +103,30 @@ export const updateUserPassword = async (req: Request, res: Response): Promise<R
     console.info(`[${new Date().toLocaleString()}] Incoming ${req.method}${req.originalUrl} Request from ${req.rawHeaders[0]} ${req.rawHeaders[1]}`);
 
     let passwords: { old: string, new: string } = { ...req.body };
+    const id = Number(req.params.userId);
 
     try {
         const pool = await connection();
-        const result: ResultSet = await pool.query(QUERY.SELECT, [req.params.userId]);
+        const result: ResultSet = await pool.query(QUERY.SELECT, [id]);
         
         if((result[0] as Array<ResultSet>).length > 0){
 
-            const valid: boolean = await checkPassword(passwords.old, (result[0] as User[])[0].passhash);
+            const valid: boolean = await checkPassword(passwords.old, (result[0] as Array<User>)[0].passhash);
 
             if(valid){
                 passwords.new = await hashPassword(passwords.new);
-                await pool.query(QUERY.UPDATE_PASSWORD, [passwords.new, req.params.userId]);
+                const result: ResultSet = await pool.query(QUERY.UPDATE_PASSWORD, [passwords.new, id]);
                 
-                return res.status(Code.OK).send(new HttpResponse(Code.OK, Status.OK, 'User password updated', { id: req.params.userId }));
+                if(validateUpdate(result))
+                    // A better way is make a SELECT and compare the user return with the user send to check if the update was really successful
+                    return res.status(Code.OK).send(new HttpResponse(Code.OK, Status.OK, 'User password updated'));
+
+                return res.status(Code.BAD_REQUEST).send(new HttpResponse(Code.BAD_REQUEST, Status.BAD_REQUEST, 'An error occured', result));
             }
             return res.status(Code.BAD_REQUEST).send(new HttpResponse(Code.BAD_REQUEST, Status.BAD_REQUEST, 'Invalid Password'));
-
-        } else {
-            return res.status(Code.NOT_FOUND).send(new HttpResponse(Code.NOT_FOUND, Status.NOT_FOUND, 'User not found'));
         }
+        return res.status(Code.NOT_FOUND).send(new HttpResponse(Code.NOT_FOUND, Status.NOT_FOUND, 'User not found'));
+
     } catch (error: unknown) {
         console.error(error);
 
@@ -122,18 +136,22 @@ export const updateUserPassword = async (req: Request, res: Response): Promise<R
 
 export const deleteUser = async (req: Request, res: Response): Promise<Response<HttpResponse>> => {
     console.info(`[${new Date().toLocaleString()}] Incoming ${req.method}${req.originalUrl} Request from ${req.rawHeaders[0]} ${req.rawHeaders[1]}`);
+
+    const id = Number(req.params.userId);
     
     try {
         const pool = await connection();
-        const result: ResultSet = await pool.query(QUERY.SELECT, [req.params.userId]);
+        const result: ResultSet = await pool.query(QUERY.SELECT, [id]);
         
         if((result[0] as Array<ResultSet>).length > 0){
-            await pool.query(QUERY.DELETE, [req.params.userId]);
+            const result: ResultSet = await pool.query(QUERY.DELETE, [id]);
 
-            return res.status(Code.OK).send(new HttpResponse(Code.OK, Status.OK, 'User deleted'));
-        } else {
-            return res.status(Code.NOT_FOUND).send(new HttpResponse(Code.NOT_FOUND, Status.NOT_FOUND, 'User not found'));
+            if(validateDelete(result))
+                return res.status(Code.OK).send(new HttpResponse(Code.OK, Status.OK, 'User deleted'));
+            return res.status(Code.BAD_REQUEST).send(new HttpResponse(Code.BAD_REQUEST, Status.BAD_REQUEST, 'An error occured'));
         }
+        return res.status(Code.NOT_FOUND).send(new HttpResponse(Code.NOT_FOUND, Status.NOT_FOUND, 'User not found'));
+
     } catch (error: unknown) {
         console.error(error);
 
@@ -144,22 +162,22 @@ export const deleteUser = async (req: Request, res: Response): Promise<Response<
 export const authUser = async (req: Request, res: Response): Promise<Response<HttpResponse>> => {
     console.info(`[${new Date().toLocaleString()}] Incoming ${req.method}${req.originalUrl} Request from ${req.rawHeaders[0]} ${req.rawHeaders[1]}`);
 
-    let user: User = { ...req.body };
+    const user: User = { ...req.body };
 
     try {
         const pool = await connection();
         const result: ResultSet = await pool.query(QUERY.SELECT_EMAIL, [user.email]);
         
         if((result[0] as Array<ResultSet>).length > 0){
-            const login: boolean = await checkPassword(user.passhash, (result[0] as User[])[0].passhash);
+            const login: boolean = await checkPassword(user.passhash, (result[0] as Array<User>)[0].passhash);
 
             if(login)
-                return res.status(Code.OK).send(new HttpResponse(Code.OK, Status.OK, 'User Authenticated', (result[0] as User[])[0]));
+                return res.status(Code.OK).send(new HttpResponse(Code.OK, Status.OK, 'User Authenticated', (result[0] as Array<User>)[0]));
             
             return res.status(Code.BAD_REQUEST).send(new HttpResponse(Code.BAD_REQUEST, Status.BAD_REQUEST, 'Invalid Password'));
-        } else {
-            return res.status(Code.NOT_FOUND).send(new HttpResponse(Code.NOT_FOUND, Status.NOT_FOUND, 'Invalid Email'));
         }
+        return res.status(Code.NOT_FOUND).send(new HttpResponse(Code.NOT_FOUND, Status.NOT_FOUND, 'Invalid Email'));
+
     } catch (error: unknown) {
         console.error(error);
 

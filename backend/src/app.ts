@@ -3,7 +3,7 @@ import express, { Application, Request, Response } from "express";
 import ip from "ip";
 import { Code } from "./enums/code.enum";
 import { Status } from "./enums/status.enum";
-import { HttpResponse } from "./services/response";
+import { HttpResponse } from "./services/response.http";
 import { userRoutes , reviewRoutes, listRoutes, showRoutes } from "./routes/";
 
 export class App {

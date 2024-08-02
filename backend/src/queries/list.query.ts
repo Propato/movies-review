@@ -1,11 +1,8 @@
 export const QUERY = {
-    SELECT_ALL: 'SELECT * FROM List WHERE userId = ? ORDER BY created_at DESC LIMIT 50',
-    SELECT: 'SELECT * FROM List WHERE listId = ?',
-    CREATE: 'INSERT INTO List (userId, listName) VALUES (?, ?)',
-    UPDATE: 'UPDATE List SET listName = ? WHERE listId = ?',
-    DELETE: 'DELETE FROM List WHERE listId = ?',
-
-    SELECT_MOVIES: 'SELECT * FROM MovieFromList WHERE listId = ?',
-    INSERT_MOVIE: 'INSERT INTO MovieFromList (movieId, listId) VALUES (?, ?)',
-    DELETE_MOVIE: 'DELETE FROM MovieFromList WHERE movieId = ? AND listId = ?'
+    SELECT_ALL: 'SELECT * FROM Lists WHERE userId = ? ORDER BY listName DESC LIMIT 50',
+    SELECT_NAME: 'SELECT * FROM Lists WHERE userId = ? AND listName = ?',
+    SELECT: 'SELECT * FROM Lists WHERE userId = ? AND listId = ?',
+    CREATE: 'INSERT INTO Lists (userId, listName, description) VALUES (?, ?, ?)',
+    UPDATE: 'UPDATE Lists SET listName = ?, description = ? WHERE userId = ? AND listId = ?',
+    DELETE: 'DELETE FROM Lists WHERE userId = ? AND listId = ?',
 };

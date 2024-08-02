@@ -1,7 +1,7 @@
 import { FieldPacket, ProcedureCallPacket, ResultSetHeader, RowDataPacket } from "mysql2";
 import { Review } from "../interfaces/review.interface";
 import { connection } from "../configs/mysql.config";
-import { HttpResponse } from "../services/response";
+import { HttpResponse } from "../services/response.http";
 import { QUERY } from "../queries/review.query";
 import { Request, Response } from "express";
 import { Code, Status } from "../enums";
