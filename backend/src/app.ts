@@ -30,7 +30,7 @@ export class App {
     private routes(): void {
         this.app.use('/users', userRoutes);
         this.app.use('/list', listRoutes);
-        // this.app.use('/reviews', reviewRoutes);
+        this.app.use('/reviews', reviewRoutes);
         // this.app.use('/shows', showRoutes);
 
         this.app.get('/', (req: Request, res: Response) => {

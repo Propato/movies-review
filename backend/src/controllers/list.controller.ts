@@ -5,6 +5,7 @@ import { HttpResponse } from "../services/response.http";
 import { Request, Response } from "express";
 import { QUERY } from "../queries/list.query";
 import { Code, Status } from "../enums";
+import { validateCreate, validateDelete, validateUpdate } from "../services/queries.result";
 
 type ResultSet = [ResultSetHeader | RowDataPacket[] | ResultSetHeader[] | RowDataPacket[][] | ProcedureCallPacket, FieldPacket[]];
 
@@ -13,7 +14,7 @@ export const getLists = async (req: Request, res: Response): Promise<Response<Ht
 
     try {
         const pool = await connection();
-        const result: ResultSet = await pool.query(QUERY.SELECT_ALL, [req.params.userId]);
+        const result: ResultSet = await pool.query(QUERY.SELECT_ALL, [Number(req.params.userId)]);
 
         return res.status(Code.OK).send(new HttpResponse(Code.OK, Status.OK, 'Lists retrieved', result[0]));
     } catch (error: unknown) {
@@ -26,18 +27,20 @@ export const getLists = async (req: Request, res: Response): Promise<Response<Ht
 export const createList = async (req: Request, res: Response): Promise<Response<HttpResponse>> => {
     console.info(`[${new Date().toLocaleString()}] Incoming ${req.method}${req.originalUrl} Request from ${req.rawHeaders[0]} ${req.rawHeaders[1]}`);
 
-    const list: List = { ...req.body };
+    let list: List = { ...req.body };
+    const userId = Number(req.params.userId);
 
     try {
         const pool = await connection();
-        const result_create: ResultSet = await pool.query(QUERY.CREATE, [req.params.userId, ...Object.values(list)]);
+        const result: ResultSet = await pool.query(QUERY.CREATE, [userId, ...Object.values(list)]);
 
-        const result: ResultSet = await pool.query(QUERY.SELECT_NAME, [req.params.userId, list.listName]);
-        
-        if((result[0] as Array<ResultSet>).length > 0)
-            return res.status(Code.OK).send(new HttpResponse(Code.OK, Status.OK, 'List created', { "Result_Create": result_create, "Result": (result[0] as List[])[0] }));
-        
-        return res.status(Code.BAD_REQUEST).send(new HttpResponse(Code.BAD_REQUEST, Status.BAD_REQUEST, 'An error occured', { "Result": result_create}));
+        list.listId = validateCreate(result); // validate and return the list Id
+
+        if(list.listId){
+            list.userId = userId;
+            return res.status(Code.OK).send(new HttpResponse(Code.OK, Status.OK, 'List created', list ));
+        }
+        return res.status(Code.BAD_REQUEST).send(new HttpResponse(Code.BAD_REQUEST, Status.BAD_REQUEST, 'An error occured', result));
 
     } catch (error: unknown) {
         console.error(error);
@@ -49,8 +52,9 @@ export const createList = async (req: Request, res: Response): Promise<Response<
 export const updateList = async (req: Request, res: Response): Promise<Response<HttpResponse>> => {
     console.info(`[${new Date().toLocaleString()}] Incoming ${req.method}${req.originalUrl} Request from ${req.rawHeaders[0]} ${req.rawHeaders[1]}`);
     
-    const list: List = { ...req.body };
-    const { userId, listId } = req.params;
+    let list: List = { ...req.body };
+    const userId = Number(req.params.userId);
+    const listId = Number(req.params.listId);
 
     try {
         const pool = await connection();
@@ -59,7 +63,12 @@ export const updateList = async (req: Request, res: Response): Promise<Response<
         if((result[0] as Array<ResultSet>).length > 0){
             const result: ResultSet = await pool.query(QUERY.UPDATE, [...Object.values(list), userId, listId]);
 
-            return res.status(Code.OK).send(new HttpResponse(Code.OK, Status.OK, 'List updated', { "Result": result }));
+            if(validateUpdate(result)){
+                list.userId = userId;
+                list.listId = listId;
+                return res.status(Code.OK).send(new HttpResponse(Code.OK, Status.OK, 'List updated', list));
+            }
+            return res.status(Code.BAD_REQUEST).send(new HttpResponse(Code.BAD_REQUEST, Status.BAD_REQUEST, 'An error occured', result));
         }
         return res.status(Code.NOT_FOUND).send(new HttpResponse(Code.NOT_FOUND, Status.NOT_FOUND, 'List not found'));
 
@@ -73,7 +82,8 @@ export const updateList = async (req: Request, res: Response): Promise<Response<
 export const deleteList = async (req: Request, res: Response): Promise<Response<HttpResponse>> => {
     console.info(`[${new Date().toLocaleString()}] Incoming ${req.method}${req.originalUrl} Request from ${req.rawHeaders[0]} ${req.rawHeaders[1]}`);
 
-    const { userId, listId } = req.params;
+    const userId = Number(req.params.userId);
+    const listId = Number(req.params.listId);
     
     try {
         const pool = await connection();
@@ -82,10 +92,12 @@ export const deleteList = async (req: Request, res: Response): Promise<Response<
         if((result[0] as Array<ResultSet>).length > 0){
             const result: ResultSet = await pool.query(QUERY.DELETE, [userId, listId]);
 
-            return res.status(Code.OK).send(new HttpResponse(Code.OK, Status.OK, 'List deleted', { "Result": result }));
-        } else {
-            return res.status(Code.NOT_FOUND).send(new HttpResponse(Code.NOT_FOUND, Status.NOT_FOUND, 'List not found'));
+            if(validateDelete(result))
+                return res.status(Code.OK).send(new HttpResponse(Code.OK, Status.OK, 'List deleted'));
+            return res.status(Code.BAD_REQUEST).send(new HttpResponse(Code.BAD_REQUEST, Status.BAD_REQUEST, 'An error occured', result));
         }
+        return res.status(Code.NOT_FOUND).send(new HttpResponse(Code.NOT_FOUND, Status.NOT_FOUND, 'List not found'));
+
     } catch (error: unknown) {
         console.error(error);
 

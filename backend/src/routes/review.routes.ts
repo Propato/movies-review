@@ -1,16 +1,13 @@
 import { Router } from 'express';
-import { createReview, deleteReview, getReview, getReviews, updateReview } from '../controllers/review.controller';
+import { createReview, deleteReview, getReviews, updateReview } from '../controllers/review.controller';
 
 const reviewRoutes = Router();
 
-reviewRoutes.route('/')
-    .post(createReview);
-
-reviewRoutes.route('/:userId')
+reviewRoutes.route('/:listId')
+    .post(createReview)
     .get(getReviews);
 
-reviewRoutes.route('/:userId/:movieId')
-    .get(getReview)
+reviewRoutes.route('/:listId/:movieId')
     .put(updateReview)
     .delete(deleteReview);
 

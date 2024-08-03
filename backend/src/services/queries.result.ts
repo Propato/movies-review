@@ -9,8 +9,13 @@ export const validateCreate = (result: ResultSet) => {
     let res = result as Array<ResultSetHeader>;
     
     if(res[0].affectedRows === 1 && res[0].insertId !== 0 && res[0].warningStatus === 0 && res[0].info === "" && (res[1] === null || res[1] === undefined))
-        return res[0].insertId as number;
+        return res[0].insertId;
     return 0;
+}
+
+// insertId is equal to the Id ONLY when is an auto increment, because of this, in cases where the Id is not auto incremented, it will be 0, acting like the validateDelete function.
+export const validateCreateNoId = (result: ResultSet) => {
+    return validateDelete(result);
 }
 
 export const validateUpdate = (result: ResultSet) => {

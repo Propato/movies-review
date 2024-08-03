@@ -30,6 +30,7 @@ case $1 in
    -r | --remove)
       docker volume prune -a
       docker image prune
+      docker container prune
    ;;
    -h|--help)
     	echo "
