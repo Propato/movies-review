@@ -2,11 +2,15 @@
 
 ## Refactoring
 
-I'm currently refactoring the backend. I have rebuilt the SQL tables and will now recode the API to match the new database.
+I refactored the backend.
+
+I rebuilt the SQL tables and will now reconnect with the TMDB API.
 
 ## Data Diagram
 
-<img src="./db/model/data-diagram.png" alt="Data Diagram">
+<div align="center">
+    <img width="50%" src="./db/model/data-diagram.png" alt="Data Diagram">
+</div>
 
 ## Description
 
@@ -20,17 +24,23 @@ This application is a basic version, as there are several possible improvements,
 
 ## To Do
 
-### Transactions
+### Documentation
 
-It is necessary to implement transactions so that, if the results of an operation are invalidated, what was done is undone.
+Complete the system documentation, explaining how to run, use and end the backend application.
  
-### Triggers
+### Procedures
+
+#### Users
 
 Whenever a user is created, they will have the following lists:
 
  - Favorites,
  - Watch Later,
  - Reviews.
+
+ #### Reviews
+
+ Whenever a review is made, it is added to the Reviews list (even if it is already in another list).
 
 ### Exceptions
 
