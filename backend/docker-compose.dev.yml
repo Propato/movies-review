@@ -1,0 +1,47 @@
+services: 
+
+  mysqldb:
+    image: mysql:8
+    container_name: db-reviews
+    command: --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+    restart: unless-stopped
+    volumes:
+      - ./db/init.sql:/docker-entrypoint-initdb.d/0_init.sql
+      - database:/var/lib/mysql
+    ports:
+      - 3000:3000
+    environment:
+      MYSQL_DATABASE: movies-db
+      MYSQL_USER: ${DB_USER}
+      MYSQL_PASSWORD: ${DB_PASSWORD}
+      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
+      SERVICE_TAGS: dev
+      SERVICE_NAME: mysqldb
+    networks:
+      - reviews
+
+  app:
+    container_name: app-reviews
+    build: ./server
+    image: app-reviews:v1
+    command: ["start:dev"]
+    volumes:
+      - ./server/src:/usr/app/src
+    env_file:
+      - ./.env
+    environment:
+      SERVICE_TAGS: dev
+      SERVICE_NAME: appreviews
+    ports:
+      - ${SERVER_PORT}:${SERVER_PORT}
+    depends_on:
+      - mysqldb
+    networks:
+      - reviews
+
+volumes:
+  database:
+
+networks:
+  reviews:
+    driver: bridge
