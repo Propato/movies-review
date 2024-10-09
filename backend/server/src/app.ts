@@ -4,14 +4,14 @@ import ip from "ip";
 import { Code } from "./enums/code.enum";
 import { Status } from "./enums/status.enum";
 import { HttpResponse } from "./services/response.http";
-import { userRoutes , reviewRoutes, listRoutes, showRoutes } from "./routes/";
+import { userRoutes , reviewRoutes, listRoutes, showRoutes } from "./routes";
 
 export class App {
     private readonly app: Application;
     private readonly APPLICATION_RUNNING = 'Application is running on:';
     private readonly ROUTE_NOT_FOUND = 'Route does not exist on the server';
 
-    constructor(private readonly port: (string | number) = process.env.SERVER_PORT || 8000){
+    constructor(private readonly port: (string | number) = Number(process.env.SERVER_PORT)){
         this.app = express();
         this.middleWare();
         this.routes();

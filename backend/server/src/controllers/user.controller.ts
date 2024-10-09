@@ -3,12 +3,13 @@ import { connection } from "../configs/mysql.config";
 import { HttpResponse } from "../services/response.http";
 import { Request, Response } from "express";
 import { QUERY } from "../queries/user.query";
-import { Code, Status } from "../enums/";
+import { Code, Status } from "../enums";
 import { checkPassword, hashPassword } from "../services/pass.crypto";
 import { ResultSet, validateCreate, validateDelete, validateUpdate } from "../services/queries.result";
 
 export const getUsers = async (req: Request, res: Response): Promise<Response<HttpResponse>> => {
-    console.info(`[${new Date().toLocaleString()}] Incoming ${req.method}${req.originalUrl} Request from ${req.rawHeaders[0]} ${req.rawHeaders[1]}`);
+    console.info(`[${new Date().toLocaleString()}] Incoming ${req.method} Request from ${req.rawHeaders[0]} ${req.rawHeaders[1]}${req.originalUrl}`);
+    console.log(req.rawHeaders);
 
     try {
         const pool = await connection();
